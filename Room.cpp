@@ -1,6 +1,14 @@
 #include <iostream>
+#include <vector>
+#include <cstring>
+
+#include "Room.h"
 
 using namespace std;
+
+Room::Item(char* itemNameTemp) {
+  strncpy(itemName, itemNameTemp, 19);
+}
 
 Room::Room(char* roomNameTemp, char* roomDescriptionTemp) {
   strncpy(roomName, roomNameTemp, 79);
@@ -9,4 +17,8 @@ Room::Room(char* roomNameTemp, char* roomDescriptionTemp) {
 
 void Room::addNeighbor(char* direction, Room* neighbor) {
   neighbors.insert(pair<char*,Room*>);
+}
+
+void Room:addItem(Item* item) {
+  items.push_back(item);
 }
