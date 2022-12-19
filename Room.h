@@ -22,6 +22,7 @@ public:
   char itemName[15];
   char roomName[80];
   char roomDescription[200];
+private:
   map<char*, Room*> neighbors;
   vector<Item*> items;
 };

@@ -10,7 +10,7 @@ using namespace std;
 
 void print(Room* toPrint, vector<Item*> inventory);
 Room* goNextRoom(Room* currentRoom);
-void pickUpItem(Room* currentRoom, vector<Item*> inventory);
+void pickUpItem(Room* currentRoom, char* itemNameTemp, vector<Item*> inventoryTemp);
 void dropItem(char* item, Room* currentRoom, vector<Item*> inventory);
 void printInventory(vector<Item*> inventory);
 
@@ -167,7 +167,11 @@ int main() {
       currentRoom = goNextRoom(currentRoom);
     } 
     else if (input[0] == 'p' || input[0] == 'P') {
-      pickUpItem(currentRoom, inventory);
+      char itemName[20];
+      cout << "Which Item Woulf You Like To Pick Up?" << endl;
+      cin.get(itemName, 19);
+      cin.get();
+      pickUpItem(currentRoom, itemName, inventory);
     } 
     else if (input[0] == 'd' || input[0] == 'D') {
       dropItem(itemName, currentRoom, inventory);
@@ -229,18 +233,13 @@ Room* goNextRoom(Room* currentRoom) {
   return currentRoom;
 }
 
-void pickUpItem(Room* currentRoom, vector<Item*> inventory) {
-  char itemName[20];
-  cout << "Which item would you like to pick up?" << endl;
-  cin.get(itemName, 19);
-  cin.get();
-
-  if (currentRoom->findItem(itemName) != '\0') {
-    inventory.push_back(currentRoom->findItem(itemName));
-    currentRoom->takeItem(itemName);
+void pickUpItem(Room* currentRoom, char* itemNameTemp, vector<Item*> &inventoryTemp) {
+  if (currentRoom->findItem(itemNameTemp) != '\0') {
+    inventoryTemp.push_back(currentRoom->findItem(itemNameTemp));
+    currentRoom->takeItem(itemNameTemp);
   }
   else {
-    cout << "This Item Is Not In This Room!" << endl;
+    cout << "Item Not Found" << endl;
   }
 }
 
