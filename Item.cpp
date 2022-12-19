@@ -5,6 +5,10 @@
 
 using namespace std;
 
-Item::Item(char *nameTemp) { strncpy(name, nameTemp, 19); }
+Item::Item(char* nameTemp) {
+    strncpy(name, nameTemp, 19);
+}
 
-char *Item::getName() { return name; }
+char* Item::getName() {
+    return name;
+}

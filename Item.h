@@ -6,8 +6,8 @@ using namespace std;
 
 class Item {
 public:
-  Item(char *);
-  char *getName();
+  Item(char*);
+  char* getName();
 
-  char *name;
+  char* name;
 };
