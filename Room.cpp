@@ -38,8 +38,11 @@ Item* Room::findItem(char* name) {
   for (itr = items.begin(); itr != items.end(); itr++) {
     char* itemName = (*itr)->getItemName();
     if (strcmp(itemName, name) == 0) {
-      return (*itr);
       cout << "found item" << endl;
+      return (*itr);
+    }
+    else {
+      cout << "item not found" << endl;
     }
   }
   return NULL;
@@ -54,6 +57,9 @@ void Room::takeItem(char* name) {
       items.erase(itr);
       cout << "took item" << endl;
     }
+    else {
+      cout << "item not taken" << endl;
+    }
   }
 }
 
@@ -67,14 +73,10 @@ void Room::printItems() {
 
 void Room::printExits() {
   map<char*, Room*>::iterator itr;
-
+  
   for (itr = neighbors.begin(); itr != neighbors.end(); itr++) {
     cout << itr->first << endl;
   }
-}
-
-char* Room::getItemName() {
-  return itemName;
 }
 
 char* Room::getRoomName() {

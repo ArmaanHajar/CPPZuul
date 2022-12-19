@@ -153,7 +153,7 @@ int main() {
 
   bool gameWon = false;
   cout << "---------------------------------------------------------" << endl;
-  cout << "Welcome to the Mid-West Coast Zuul! Your job is to make it rain in Arizona and to bring trees to Nevada!" << endl;
+  cout << "Welcome to the Mid-West Zuul! Your job is to make it rain in Arizona and to bring trees to Nevada!" << endl;
   while (gameWon == false) {
     cout << "---------------------------------------------------------" << endl;
     cout << "You are in: " << currentRoom->getRoomName() << endl;
@@ -188,13 +188,12 @@ int main() {
 
 void print(Room* toPrint, vector<Item*> inventory) {
   cout << toPrint->getDescription() << endl;
+  cout << endl;
   cout << "The Exits Are:" << endl;
   toPrint->printExits();
   cout << endl;
   cout << "The Items Here Are:" << endl;
   toPrint->printItems();
-  cout << endl;
-  cout << endl;
 }
 
 Room* goNextRoom(Room* currentRoom) {
@@ -208,7 +207,7 @@ Room* goNextRoom(Room* currentRoom) {
   strncpy(south, "south", 9);
   strncpy(west, "west", 9);
 
-  cout << "Which Direction Would You Like To Go?" << endl;
+  cout << "Which Direction Would You Like To Go? (north/east/south/west)" << endl;
   cin.get(direction, 10);
   cin.get();
 
@@ -231,26 +230,26 @@ Room* goNextRoom(Room* currentRoom) {
 }
 
 void pickUpItem(Room* currentRoom, vector<Item*> inventory) {
-  char itemName[10];
+  char itemName[20];
   cout << "Which item would you like to pick up?" << endl;
-  cin.get(itemName, 9);
+  cin.get(itemName, 19);
   cin.get();
 
   if (currentRoom->findItem(itemName) != '\0') {
-    currentRoom->takeItem(itemName);
     inventory.push_back(currentRoom->findItem(itemName));
+    currentRoom->takeItem(itemName);
   }
   else {
-    cout << "This item is not in this room!" << endl;
+    cout << "This Item Is Not In This Room!" << endl;
   }
 }
 
 void dropItem(char* itemName, Room* currentRoom, vector<Item*> inventory) {
-  char itenName[15];
+  char itenName[20];
   vector<Item*>::iterator itr;
 
   cout << "Which Item Would You Like To Drop?" << endl;
-  cin.get(itemName,14);
+  cin.get(itemName,19);
   cin.get();
 
   for (itr = inventory.begin(); itr != inventory.end(); itr++) {

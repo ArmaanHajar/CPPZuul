@@ -17,7 +17,6 @@ public:
   Room* changeRoom(char*);
   Item* findItem(char*);
   char* getRoomName();
-  char* getItemName();
   char* getDescription();
 
   char itemName[15];
