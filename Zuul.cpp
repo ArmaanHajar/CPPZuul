@@ -1,3 +1,9 @@
+/*
+ * Author: Armaan Hajar
+ * Description: This is a text based adventure game where the player must travel between states, dropping off items to win the game.
+ * Win Condition: Drop the trees in Nevada and the rain in Arizona
+ */
+
 #include <cstring>
 #include <iostream>
 #include <iterator>
@@ -8,19 +14,24 @@
 
 using namespace std;
 
+// Function Prototypes
+void checkWin(Room* currentRoom, vector<Item*> inventory, bool &treesInNevada, bool &rainInArizona);
 void print(Room* toPrint, vector<Item*> inventory);
 Room* goNextRoom(Room* currentRoom);
-void pickUpItem(Room* currentRoom, char* itemNameTemp, vector<Item*> inventoryTemp);
-void dropItem(char* item, Room* currentRoom, vector<Item*> inventory);
+void pickUpItem(Room* currentRoom, vector<Item*> &inventory);
+void dropItem(char* item, Room* currentRoom, vector<Item*> &inventory);
 void printInventory(vector<Item*> inventory);
 
+// Main Function
 int main() {
+  // Create Items
   vector<Item*> inventory;
 
   char roomName[80];
   char roomDescription[200];
   char itemName[20];
 
+  // Create Directions
   char* north = new char[10];
   char* east = new char[10];
   char* south = new char[10];
@@ -30,6 +41,7 @@ int main() {
   strncpy(south, "south", 9);
   strncpy(west, "west", 9);
 
+  // Create Rooms
   strncpy(roomName, "Alaska", 79);
   strncpy(roomDescription, "A Very Cold State", 199);
   Room* alaska = new Room(roomName, roomDescription);
@@ -90,6 +102,7 @@ int main() {
   strncpy(roomDescription, "Wait, This State Exists?", 199);
   Room* newmexico = new Room(roomName, roomDescription);
 
+  // Create Items
   strncpy(itemName, "Snow", 19);
   Item* snow = new Item(itemName);
   strncpy(itemName, "Rain Water", 19);
@@ -101,12 +114,14 @@ int main() {
   strncpy(itemName, "A Funny Accent", 19);
   Item* accent = new Item(itemName);
 
+ // Add Items to Rooms
   alaska->addItem(snow);
   washington->addItem(rainwater);
   oregon->addItem(trees);
   colorado->addItem(skigear);
   nebraska->addItem(accent);
 
+  // Add Neighbors to Rooms
   alaska->addNeighbor(south, washington);
   washington->addNeighbor(north, alaska);
   washington->addNeighbor(east, montana);
@@ -152,9 +167,19 @@ int main() {
   char input[10];
 
   bool gameWon = false;
+  bool treesInNevada = false;
+  bool rainInArizona = false;
+
   cout << "---------------------------------------------------------" << endl;
   cout << "Welcome to the Mid-West Zuul! Your job is to make it rain in Arizona and to bring trees to Nevada!" << endl;
-  while (gameWon == false) {
+  while (gameWon == false) { // Game Loop
+    checkWin(currentRoom, inventory, treesInNevada, rainInArizona);
+
+    if (treesInNevada == true && rainInArizona == true) {
+      gameWon = true;
+    }
+
+    // Print Current Room
     cout << "---------------------------------------------------------" << endl;
     cout << "You are in: " << currentRoom->getRoomName() << endl;
     print(currentRoom, inventory);
@@ -163,44 +188,59 @@ int main() {
 
     cin.get(input, 10);
     cin.get();
-    if (input[0] == 'g' || input[0] == 'G') {
+    if (input[0] == 'g' || input[0] == 'G') { // Go
       currentRoom = goNextRoom(currentRoom);
     } 
-    else if (input[0] == 'p' || input[0] == 'P') {
-      char itemName[20];
-      cout << "Which Item Woulf You Like To Pick Up?" << endl;
-      cin.get(itemName, 19);
-      cin.get();
-      pickUpItem(currentRoom, itemName, inventory);
+    else if (input[0] == 'p' || input[0] == 'P') { // Pick Up
+      pickUpItem(currentRoom, inventory);
     } 
-    else if (input[0] == 'd' || input[0] == 'D') {
+    else if (input[0] == 'd' || input[0] == 'D') { // Drop
       dropItem(itemName, currentRoom, inventory);
     } 
-    else if (input[0] == 'i' || input[0] == 'I') {
+    else if (input[0] == 'i' || input[0] == 'I') { // Inventory
       printInventory(inventory);
     }
-    else if (input[0] == 'q' || input[0] == 'Q') {
+    else if (input[0] == 'q' || input[0] == 'Q') { // Quit
       cout << "Thank You For Playing!" << endl;
       break;
     }
-    else {
+    else { /// Invalid Input
       cout << "Invalid Input" << endl;
     }
   }
   return 0;
 }
 
-void print(Room* toPrint, vector<Item*> inventory) {
+void checkWin(Room* currentRoom, vector<Item*> inventory, bool &treesInNevada, bool &rainInArizona) { // Checks if the game has been won
+  vector<Item*>::iterator itr;
+  vector<Item*>::iterator itr2;
+
+  // Check if Trees are in Nevada
+  for (itr = inventory.begin(); itr != inventory.end(); itr++) {
+    if (strcmp((*itr)->getItemName(), "Trees") == 0 && strcmp(currentRoom->getRoomName(), "Nevada") == 0) {
+      treesInNevada = true;
+    }
+  }
+
+  // Check if Rain is in Arizona
+  for (itr2 = inventory.begin(); itr2 != inventory.end(); itr2++) {
+    if (strcmp((*itr2)->getItemName(), "Rain Water") == 0 && strcmp(currentRoom->getRoomName(), "Arizona") == 0) {
+      rainInArizona = true;
+    }
+  }
+}
+
+void print(Room* toPrint, vector<Item*> inventory) { // Prints the description, neighbors, and items in current room
   cout << toPrint->getDescription() << endl;
   cout << endl;
-  cout << "The Exits Are:" << endl;
-  toPrint->printExits();
+  cout << "The Neighbors Are:" << endl;
+  toPrint->printNeighbors();
   cout << endl;
   cout << "The Items Here Are:" << endl;
   toPrint->printItems();
 }
 
-Room* goNextRoom(Room* currentRoom) {
+Room* goNextRoom(Room* currentRoom) { // Changes the current room
   char direction[10];
   char* north = new char[10];
   char* east = new char[10];
@@ -211,61 +251,73 @@ Room* goNextRoom(Room* currentRoom) {
   strncpy(south, "south", 9);
   strncpy(west, "west", 9);
 
+  // Get Direction
   cout << "Which Direction Would You Like To Go? (north/east/south/west)" << endl;
   cin.get(direction, 10);
   cin.get();
 
-  if (direction[0] == 'n' || direction[0] == 'N') {
+  if (direction[0] == 'n' || direction[0] == 'N') { // North
     currentRoom = currentRoom->changeRoom(north);
   } 
-  else if (direction[0] == 'e' || direction[0] == 'E') {
+  else if (direction[0] == 'e' || direction[0] == 'E') { // East
     currentRoom = currentRoom->changeRoom(east);
   } 
-  else if (direction[0] == 's' || direction[0] == 'S') {
+  else if (direction[0] == 's' || direction[0] == 'S') { // South
     currentRoom = currentRoom->changeRoom(south);
   } 
-  else if (direction[0] == 'w' || direction[0] == 'W') {
+  else if (direction[0] == 'w' || direction[0] == 'W') { // West
     currentRoom = currentRoom->changeRoom(west);
   } 
-  else {
+  else { // Invalid Input
     cout << "Invalid Input" << endl;
   }
   return currentRoom;
 }
 
-void pickUpItem(Room* currentRoom, char* itemNameTemp, vector<Item*> &inventoryTemp) {
-  if (currentRoom->findItem(itemNameTemp) != '\0') {
-    inventoryTemp.push_back(currentRoom->findItem(itemNameTemp));
-    currentRoom->takeItem(itemNameTemp);
+void pickUpItem(Room* currentRoom, vector<Item*> &inventory) { // Adds an item to the inventory and takes it from the room
+  // Get Item Name
+  char itemName[20];
+  cout << "Which Item Would You Like To Pick Up?" << endl;
+  cin.get(itemName, 19);
+  cin.get();
+
+  if (currentRoom->findItem(itemName) != '\0') { // If the item is in the room
+    inventory.push_back(currentRoom->findItem(itemName));
+    currentRoom->takeItem(itemName);
+    cout << "Item Picked Up" << endl;
   }
-  else {
+  else { // If the item is not in the room
     cout << "Item Not Found" << endl;
   }
 }
 
-void dropItem(char* itemName, Room* currentRoom, vector<Item*> inventory) {
+void dropItem(char* itemName, Room* currentRoom, vector<Item*> &inventory) { // Removes an item from the inventory and drops it in the room
   char itenName[20];
   vector<Item*>::iterator itr;
 
+  // Get Item Name
   cout << "Which Item Would You Like To Drop?" << endl;
   cin.get(itemName,19);
   cin.get();
 
-  for (itr = inventory.begin(); itr != inventory.end(); itr++) {
+  for (itr = inventory.begin(); itr != inventory.end(); itr++) { // Find the item in the inventory
     char* item = (*itr)->getItemName();
     if (strcmp(itemName, item) == 0) {
       currentRoom->addItem(*itr);
       inventory.erase(itr);
       break;
     }
+    else { // If the item is not in the inventory
+      cout << "Item Not Found" << endl;
+    }
   }
 }
 
-void printInventory(vector<Item*> inventory) {
+void printInventory(vector<Item*> inventory) { // Prints the items in the inventory
   vector<Item*>::iterator itr;
 
   cout << "Inventory: " << endl;
-  for (itr = inventory.begin(); itr != inventory.end(); itr++) {
-    cout << (*itr)->getItemName() << "  ";
+  for (itr = inventory.begin(); itr != inventory.end(); itr++) { // Iterates through items in the inventory and prints them
+    cout << (*itr)->getItemName() << endl;
   }
 }
