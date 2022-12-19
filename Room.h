@@ -16,9 +16,11 @@ public:
   void printExits();
   Room* changeRoom(char*);
   Item* findItem(char*);
-  char* getName();
+  char* getRoomName();
+  char* getItemName();
   char* getDescription();
 
+  char itemName[15];
   char roomName[80];
   char roomDescription[200];
   map<char*, Room*> neighbors;

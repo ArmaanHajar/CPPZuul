@@ -5,11 +5,11 @@
 
 using namespace std;
 
-Item::Item(char* nameTemp) {
-    name = new char[20];
-    strncpy(name, nameTemp, 19);
+Item::Item(char* itemNameTemp) {
+    itemName = new char[20];
+    strncpy(itemName, itemNameTemp, 19);
 }
 
-char* Item::getName() {
-    return name;
+char* Item::getItemName() {
+    return itemName;
 }

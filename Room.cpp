@@ -36,9 +36,10 @@ Item* Room::findItem(char* name) {
   vector<Item*>::iterator itr;
 
   for (itr = items.begin(); itr != items.end(); itr++) {
-    char* itemName = (*itr)->getName();
+    char* itemName = (*itr)->getItemName();
     if (strcmp(itemName, name) == 0) {
       return (*itr);
+      cout << "found item" << endl;
     }
   }
   return NULL;
@@ -48,9 +49,10 @@ void Room::takeItem(char* name) {
   vector<Item*>::iterator itr;
 
   for (itr = items.begin(); itr != items.end(); itr++) {
-    char* itemName = (*itr)->getName();
+    char* itemName = (*itr)->getItemName();
     if (strcmp(itemName, name) == 0) {
       items.erase(itr);
+      cout << "took item" << endl;
     }
   }
 }
@@ -59,7 +61,7 @@ void Room::printItems() {
   vector<Item*>::iterator itr;
 
   for (itr = items.begin(); itr != items.end(); itr++) {
-    cout << (*itr)->getName() << endl;
+    cout << (*itr)->getItemName() << endl;
   }
 }
 
@@ -71,7 +73,11 @@ void Room::printExits() {
   }
 }
 
-char* Room::getName() {
+char* Room::getItemName() {
+  return itemName;
+}
+
+char* Room::getRoomName() {
   return roomName;
 }
 

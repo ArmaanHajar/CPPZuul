@@ -7,7 +7,7 @@ using namespace std;
 class Item {
 public:
   Item(char*);
-  char* getName();
+  char* getItemName();
 
-  char* name;
+  char* itemName;
 };
