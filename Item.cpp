@@ -6,6 +6,7 @@
 using namespace std;
 
 Item::Item(char* nameTemp) {
+    name = new char[20];
     strncpy(name, nameTemp, 19);
 }
 

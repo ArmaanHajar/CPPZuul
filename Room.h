@@ -19,7 +19,6 @@ public:
   char* getName();
   char* getDescription();
 
-  char* name;
   char roomName[80];
   char roomDescription[200];
   map<char*, Room*> neighbors;

@@ -152,23 +152,34 @@ int main() {
   char input[10];
 
   bool gameWon = false;
+  cout << "---------------------------------------------------------" << endl;
   cout << "Welcome to the Mid-West Coast Zuul! Your job is to make it rain in Arizona and to bring trees to Nevada!" << endl;
   while (gameWon == false) {
-    cout << "You are in: " << currentRoom << endl;
+    cout << "You are in: " << currentRoom->getName() << endl;
     print(currentRoom, inventory);
     cout << "---------------------------------------------------------" << endl;
-    cout << "What Would You Like To Do? (GO/PICK UP/DROP/INVENTORY)" << endl;
+    cout << "What Would You Like To Do? (GO/PICK UP/DROP/INVENTORY/QUIT)" << endl;
 
     cin.get(input, 10);
     cin.get();
     if (input[0] == 'g' || input[0] == 'G') {
       goNextRoom(currentRoom);
-    } else if (input[0] == 'p' || input[0] == 'P') {
+    } 
+    else if (input[0] == 'p' || input[0] == 'P') {
       pickUpItem(currentRoom, inventory);
-    } else if (input[0] == 'd' || input[0] == 'D') {
+    } 
+    else if (input[0] == 'd' || input[0] == 'D') {
       dropItem(itemName, currentRoom, inventory);
-    } else if (input[0] == 'i' || input[0] == 'I') {
+    } 
+    else if (input[0] == 'i' || input[0] == 'I') {
       printInventory(inventory);
+    }
+    else if (input[0] == 'q' || input[0] == 'Q') {
+      cout << "Thank You For Playing!" << endl;
+      break;
+    }
+    else {
+      cout << "Invalid Input" << endl;
     }
   }
   return 0;
@@ -177,8 +188,6 @@ int main() {
 void print(Room* toPrint, vector<Item*> inventory) {
   char output[150];
   strcpy(output,(toPrint->getDescription()));
-  cout << endl;
-  cout << endl;
   cout << output << endl;
   toPrint->printItems();
   cout << "There are exits:" << endl;
@@ -191,14 +200,34 @@ void print(Room* toPrint, vector<Item*> inventory) {
 }
 
 void goNextRoom(Room* currentRoom) {
-  char directionTemp[10];
+  char direction[10];
+  char* north = new char[10];
+  char* east = new char[10];
+  char* south = new char[10];
+  char* west = new char[10];
+  strncpy(north, "north", 9);
+  strncpy(east, "east", 9);
+  strncpy(south, "south", 9);
+  strncpy(west, "west", 9);
 
   cout << "Which Direction Would You Like To Go?" << endl;
-  cin.get(directionTemp, 10);
+  cin.get(direction, 10);
   cin.get();
 
-  if (currentRoom->changeRoom(directionTemp) != '\0') {
-    currentRoom = currentRoom->changeRoom(directionTemp);
+  if (direction[0] == 'n' || direction[0] == 'N') {
+    currentRoom = currentRoom->changeRoom(north);
+  } 
+  else if (direction[0] == 'e' || direction[0] == 'E') {
+    currentRoom = currentRoom->changeRoom(east);
+  } 
+  else if (direction[0] == 's' || direction[0] == 'S') {
+    currentRoom = currentRoom->changeRoom(south);
+  } 
+  else if (direction[0] == 'w' || direction[0] == 'W') {
+    currentRoom = currentRoom->changeRoom(west);
+  } 
+  else {
+    cout << "Invalid Input" << endl;
   }
 }
 

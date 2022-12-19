@@ -72,7 +72,7 @@ void Room::printExits() {
 }
 
 char* Room::getName() {
-  return name;
+  return roomName;
 }
 
 char* Room::getDescription(){
