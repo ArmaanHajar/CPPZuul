@@ -281,7 +281,7 @@ void pickUpItem(Room* currentRoom, vector<Item*> &inventory) { // Adds an item t
   cin.get(itemName, 19);
   cin.get();
 
-  if (currentRoom->findItem(itemName) != '\0') { // If the item is in the room
+  if (currentRoom->findItem(itemName) != NULL) { // If the item is in the room
     inventory.push_back(currentRoom->findItem(itemName));
     currentRoom->takeItem(itemName);
     cout << "Item Picked Up" << endl;
